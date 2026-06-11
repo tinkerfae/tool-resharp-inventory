@@ -1,2 +1,365 @@
-<h1>Tool Resharp Inventory</h1>
-<p>First Version Under Construction</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tool Inventory Tracker</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #1a1a2e; color: #e0e0e0; min-height: 100vh; padding: 24px; }
+  h1 { color: #f0a500; font-size: 1.5rem; margin-bottom: 4px; }
+  .subtitle { color: #888; font-size: 0.85rem; margin-bottom: 24px; }
+
+  .card { background: #16213e; border: 1px solid #0f3460; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+  .card h2 { font-size: 1rem; color: #a0c4ff; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+  .input-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; }
+  .input-group { display: flex; flex-direction: column; gap: 4px; }
+  .input-group label { font-size: 0.75rem; color: #888; }
+  .input-group input {
+    background: #0f3460; border: 1px solid #1a5276; color: #e0e0e0;
+    border-radius: 6px; padding: 8px 12px; font-size: 0.95rem; width: 160px;
+    outline: none; transition: border-color 0.2s;
+  }
+  .input-group input:focus { border-color: #f0a500; }
+  .input-group input.error { border-color: #e74c3c; }
+
+  .qty-group { display: flex; flex-direction: column; gap: 4px; }
+  .qty-group label { font-size: 0.75rem; color: #888; }
+  .qty-row { display: flex; align-items: center; gap: 6px; }
+  .qty-row button {
+    background: #0f3460; border: 1px solid #1a5276; color: #e0e0e0;
+    width: 32px; height: 36px; border-radius: 6px; font-size: 1.1rem;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .qty-row button:hover { background: #1a5276; }
+  .qty-row input {
+    background: #0f3460; border: 1px solid #1a5276; color: #e0e0e0;
+    border-radius: 6px; padding: 8px 0; font-size: 0.95rem; width: 70px;
+    outline: none; text-align: center;
+  }
+
+  .btn {
+    padding: 8px 20px; border: none; border-radius: 6px; font-size: 0.9rem;
+    cursor: pointer; font-weight: 600; transition: opacity 0.2s;
+  }
+  .btn:hover { opacity: 0.85; }
+  .btn-add { background: #f0a500; color: #1a1a2e; }
+  .btn-remove { background: #e74c3c; color: white; }
+  .btn-clear { background: #2c3e50; color: #e0e0e0; font-size: 0.8rem; padding: 6px 14px; }
+
+  .msg { font-size: 0.82rem; margin-top: 8px; min-height: 18px; }
+  .msg.success { color: #2ecc71; }
+  .msg.error { color: #e74c3c; }
+  .msg.info { color: #3498db; }
+
+  /* Lookup preview */
+  .lookup-result {
+    background: #0f3460; border: 1px solid #1a5276; border-radius: 8px;
+    padding: 10px 14px; margin-top: 10px; font-size: 0.88rem; display: none;
+  }
+  .lookup-result.visible { display: block; }
+  .lookup-result .inv-num { font-size: 1.1rem; font-weight: 700; color: #f0a500; }
+  .lookup-result .aliases { color: #aaa; font-size: 0.8rem; margin-top: 2px; }
+  .lookup-result .stock { margin-top: 6px; color: #2ecc71; font-size: 1rem; }
+
+  /* Table */
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  thead th {
+    background: #0f3460; color: #a0c4ff; padding: 8px 12px;
+    text-align: left; font-weight: 600; border-bottom: 2px solid #1a5276;
+  }
+  tbody tr { border-bottom: 1px solid #0f3460; transition: background 0.1s; }
+  tbody tr:hover { background: #1a2a4a; }
+  tbody td { padding: 8px 12px; }
+  tbody td.inv { color: #f0a500; font-weight: 700; font-size: 1rem; }
+  tbody td.sizes { color: #888; font-size: 0.8rem; }
+  .badge {
+    display: inline-block; padding: 2px 8px; border-radius: 12px;
+    font-size: 0.78rem; font-weight: 600; margin-right: 4px;
+  }
+  .badge-inv { background: #1a5276; color: #a0c4ff; }
+  .badge-inch { background: #1a3a1a; color: #2ecc71; }
+  .badge-mm { background: #3a1a1a; color: #e74c3c; }
+
+  .empty { color: #555; font-style: italic; text-align: center; padding: 16px 0; }
+
+  .section-divider { border: none; border-top: 1px solid #0f3460; margin: 6px 0 14px; }
+
+  .tabs { display: flex; gap: 2px; margin-bottom: 16px; }
+  .tab {
+    padding: 7px 18px; border-radius: 6px 6px 0 0; cursor: pointer;
+    font-size: 0.85rem; font-weight: 600; background: #0f3460; color: #888;
+    border: 1px solid #0f3460; border-bottom: none;
+  }
+  .tab.active { background: #16213e; color: #f0a500; border-color: #1a5276; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  @media (max-width: 600px) {
+    .input-group input { width: 130px; }
+  }
+</style>
+</head>
+<body>
+
+<h1>🔧 Tool Inventory Tracker</h1>
+<p class="subtitle">Track tools by Inventory #, Inch size, or MM size — all interchangeable in increments of 50</p>
+
+<div class="card">
+  <h2>🔍 Look Up a Tool</h2>
+  <div class="input-row">
+    <div class="input-group">
+      <label>Enter Inv #, Inch (e.g. .087"), or MM (e.g. 2.2mm)</label>
+      <input type="text" id="lookupInput" placeholder='e.g. 87 or .087" or 2.2mm' oninput="doLookup()">
+    </div>
+  </div>
+  <div class="lookup-result" id="lookupResult"></div>
+</div>
+
+<div class="card">
+  <h2>➕ Add / Update Tool Stock</h2>
+  <div class="input-row">
+    <div class="input-group">
+      <label>Inventory #</label>
+      <input type="text" id="addInv" placeholder="e.g. 87" oninput="syncAdd('inv')">
+    </div>
+    <div class="input-group">
+      <label>Inch Size</label>
+      <input type="text" id="addInch" placeholder='e.g. .087"' oninput="syncAdd('inch')">
+    </div>
+    <div class="input-group">
+      <label>MM Size</label>
+      <input type="text" id="addMm" placeholder="e.g. 2.2mm" oninput="syncAdd('mm')">
+    </div>
+    <div class="qty-group">
+      <label>Boxes to Add (×50 ea)</label>
+      <div class="qty-row">
+        <button onclick="changeAddQty(-1)">−</button>
+        <input type="number" id="addQty" value="1" min="1">
+        <button onclick="changeAddQty(1)">+</button>
+      </div>
+    </div>
+    <button class="btn btn-add" onclick="addStock()" style="margin-bottom:1px">Add Stock</button>
+  </div>
+  <div class="msg" id="addMsg"></div>
+</div>
+
+<div class="card">
+  <h2>📋 Full Inventory</h2>
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+    <span style="font-size:0.82rem; color:#888;" id="invCount"></span>
+    <button class="btn btn-clear" onclick="clearAll()">Clear All Data</button>
+  </div>
+  <div id="inventoryTable"></div>
+</div>
+
+<script>
+// ─── DATA ───────────────────────────────────────────────────────────────────
+// tools: { [invNum]: { inch: string|null, mm: string|null, qty: number } }
+let tools = JSON.parse(localStorage.getItem('toolInventory') || '{}');
+
+function save() {
+  localStorage.setItem('toolInventory', JSON.stringify(tools));
+}
+
+// ─── CONVERSION ─────────────────────────────────────────────────────────────
+// Inventory number is the canonical ID (integer string, e.g. "87")
+// Inch stored as decimal string, mm stored as decimal string
+
+function invToInch(inv) {
+  // inv 87 → .087"
+  const n = parseInt(inv);
+  if (isNaN(n)) return null;
+  return '.' + String(n).padStart(3, '0') + '"';
+}
+
+function invToMm(inv) {
+  const n = parseInt(inv);
+  if (isNaN(n)) return null;
+  // standard: inv * 0.0254 mm rounded to 2 decimal places
+  return (n * 0.0254).toFixed(2) + 'mm';
+}
+
+function parseInput(raw) {
+  if (!raw) return null;
+  const s = raw.trim().replace(/\s/g, '').toLowerCase();
+
+  // Try mm: number followed by mm
+  const mmMatch = s.match(/^(\d+\.?\d*)mm$/);
+  if (mmMatch) {
+    const mm = parseFloat(mmMatch[1]);
+    const inv = Math.round(mm / 0.0254);
+    return String(inv);
+  }
+
+  // Try inch: optional leading dot, digits, optional "
+  const inchMatch = s.match(/^\.?(\d+\.?\d*)"?$|^(\d+\.?\d*)"$/);
+  if (inchMatch) {
+    const val = parseFloat(inchMatch[1] || inchMatch[2]);
+    // if it looks like a decimal inch (e.g. .087 = 0.087)
+    // inv = val * 1000 if val < 1, else check if it's already an integer inv#
+    if (val < 1) {
+      return String(Math.round(val * 1000));
+    } else {
+      // Could be inv # entered with " e.g. 87" — treat as inv
+      return String(Math.round(val));
+    }
+  }
+
+  // Try plain number → inventory number
+  const numMatch = s.match(/^\d+$/);
+  if (numMatch) return s;
+
+  return null;
+}
+
+function getToolDisplay(invStr) {
+  if (!invStr || !tools[invStr]) return null;
+  const t = tools[invStr];
+  return {
+    inv: invStr,
+    inch: t.inch || invToInch(invStr),
+    mm: t.mm || invToMm(invStr),
+    qty: t.qty
+  };
+}
+
+// ─── LOOKUP ──────────────────────────────────────────────────────────────────
+function doLookup() {
+  const raw = document.getElementById('lookupInput').value;
+  const result = document.getElementById('lookupResult');
+  if (!raw.trim()) { result.className = 'lookup-result'; return; }
+
+  const inv = parseInput(raw);
+  if (!inv) {
+    result.className = 'lookup-result visible';
+    result.innerHTML = `<span style="color:#e74c3c">Could not parse input. Try: 87, .087", or 2.2mm</span>`;
+    return;
+  }
+
+  const d = getToolDisplay(inv);
+  if (!d) {
+    result.className = 'lookup-result visible';
+    result.innerHTML = `<span style="color:#e74c3c">Inv #${inv} not in inventory yet.</span>`;
+    return;
+  }
+
+  result.className = 'lookup-result visible';
+  result.innerHTML = `
+    <span class="inv-num">Inventory #${d.inv}</span>
+    <div class="aliases">
+      <span class="badge badge-inch">${d.inch}</span>
+      <span class="badge badge-mm">${d.mm}</span>
+    </div>
+    <div class="stock">📦 ${d.qty} boxes &nbsp;|&nbsp; ${d.qty * 50} units</div>
+  `;
+}
+
+// ─── SYNC INPUTS ─────────────────────────────────────────────────────────────
+function syncAdd(source) {
+  const invEl = document.getElementById('addInv');
+  const inchEl = document.getElementById('addInch');
+  const mmEl = document.getElementById('addMm');
+
+  let raw;
+  if (source === 'inv') raw = invEl.value;
+  else if (source === 'inch') raw = inchEl.value;
+  else raw = mmEl.value;
+
+  const inv = parseInput(raw);
+  if (!inv) return;
+
+  if (source !== 'inv') invEl.value = inv;
+  if (source !== 'inch') inchEl.value = invToInch(inv);
+  if (source !== 'mm') mmEl.value = invToMm(inv);
+}
+
+function changeAddQty(d) {
+  const el = document.getElementById('addQty');
+  el.value = Math.max(1, parseInt(el.value || 1) + d);
+}
+// ─── ADD STOCK ───────────────────────────────────────────────────────────────
+function addStock() {
+  const invRaw = document.getElementById('addInv').value;
+  const inchRaw = document.getElementById('addInch').value;
+  const mmRaw = document.getElementById('addMm').value;
+  const qty = parseInt(document.getElementById('addQty').value) || 1;
+  const msg = document.getElementById('addMsg');
+
+  // Resolve inv from whichever field is filled
+  let inv = parseInput(invRaw) || parseInput(inchRaw) || parseInput(mmRaw);
+  if (!inv) {
+    msg.className = 'msg error'; msg.textContent = 'Enter an Inventory #, Inch size, or MM size.'; return;
+  }
+
+  if (!tools[inv]) tools[inv] = { inch: null, mm: null, qty: 0 };
+
+  // Store custom inch/mm if provided (overrides auto-calculated)
+  if (inchRaw.trim()) tools[inv].inch = inchRaw.trim();
+  if (mmRaw.trim()) tools[inv].mm = mmRaw.trim();
+  tools[inv].qty += qty;
+
+  save(); renderInventory();
+  msg.className = 'msg success';
+  msg.textContent = `✓ Added ${qty} box${qty>1?'es':''} (${qty*50} units) to Inv #${inv}. Total: ${tools[inv].qty} boxes.`;
+
+  document.getElementById('addInv').value = '';
+  document.getElementById('addInch').value = '';
+  document.getElementById('addMm').value = '';
+  document.getElementById('addQty').value = 1;
+}
+
+// ─── INVENTORY TABLE ─────────────────────────────────────────────────────────
+function renderInventory() {
+  const el = document.getElementById('inventoryTable');
+  const count = document.getElementById('invCount');
+  const keys = Object.keys(tools).sort((a,b) => parseInt(a)-parseInt(b));
+  count.textContent = `${keys.length} tool type${keys.length!==1?'s':''} tracked`;
+
+  if (keys.length === 0) {
+    el.innerHTML = '<div class="empty">No tools in inventory yet.</div>';
+    return;
+  }
+
+  let html = `<table><thead><tr>
+    <th>Inv #</th><th>Inch</th><th>MM</th><th>Boxes</th><th>Units</th><th></th>
+  </tr></thead><tbody>`;
+
+  keys.forEach(inv => {
+    const t = tools[inv];
+    const inch = t.inch || invToInch(inv);
+    const mm = t.mm || invToMm(inv);
+    html += `<tr>
+      <td class="inv">${inv}</td>
+      <td><span class="badge badge-inch">${inch}</span></td>
+      <td><span class="badge badge-mm">${mm}</span></td>
+      <td>${t.qty}</td>
+      <td>${t.qty * 50}</td>
+      <td>
+        <button class="btn btn-remove" style="padding:3px 10px;font-size:0.78rem" onclick="removeTool('${inv}')">Remove</button>
+      </td>
+    </tr>`;
+  });
+
+  html += '</tbody></table>';
+  el.innerHTML = html;
+}
+
+function removeTool(inv) {
+  if (!confirm(`Remove Inv #${inv} from inventory?`)) return;
+  delete tools[inv];
+  save(); renderInventory();
+}
+
+function clearAll() {
+  if (!confirm('Clear ALL inventory data?')) return;
+  tools = {};
+  save(); renderInventory();
+}
+
+// ─── INIT ────────────────────────────────────────────────────────────────────
+renderInventory();
+</script>
+</body>
+</html>
