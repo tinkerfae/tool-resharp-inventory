@@ -22,7 +22,6 @@
     outline: none; transition: border-color 0.2s;
   }
   .input-group input:focus { border-color: #f0a500; }
-  .input-group input.error { border-color: #e74c3c; }
 
   .qty-group { display: flex; flex-direction: column; gap: 4px; }
   .qty-group label { font-size: 0.75rem; color: #888; }
@@ -39,62 +38,69 @@
     outline: none; text-align: center;
   }
 
-  .btn {
-    padding: 8px 20px; border: none; border-radius: 6px; font-size: 0.9rem;
-    cursor: pointer; font-weight: 600; transition: opacity 0.2s;
-  }
+  .btn { padding: 8px 20px; border: none; border-radius: 6px; font-size: 0.9rem; cursor: pointer; font-weight: 600; transition: opacity 0.2s; }
   .btn:hover { opacity: 0.85; }
-  .btn-add { background: #f0a500; color: #1a1a2e; }
+  .btn-add    { background: #f0a500; color: #1a1a2e; }
   .btn-remove { background: #e74c3c; color: white; }
-  .btn-clear { background: #2c3e50; color: #e0e0e0; font-size: 0.8rem; padding: 6px 14px; }
+  .btn-edit   { background: #1a5276; color: #e0e0e0; }
+  .btn-master { background: #0d3b5e; color: #a0c4ff; border: 1px solid #1a5276; }
+  .btn-clear  { background: #2c3e50; color: #e0e0e0; }
+  .btn-sm     { padding: 4px 10px; font-size: 0.78rem; }
 
   .msg { font-size: 0.82rem; margin-top: 8px; min-height: 18px; }
   .msg.success { color: #2ecc71; }
-  .msg.error { color: #e74c3c; }
-  .msg.info { color: #3498db; }
+  .msg.error   { color: #e74c3c; }
+  .msg.info    { color: #f0a500; }
 
-  /* Lookup preview */
-  .lookup-result {
+  .tag { display: inline-flex; align-items: center; gap: 4px; padding: 2px 9px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; margin: 2px; }
+  .tag-inv  { background: #1a2a4a; color: #a0c4ff; border: 1px solid #1a5276; }
+  .tag-inch { background: #1a3a1a; color: #2ecc71; border: 1px solid #2ecc7144; }
+  .tag-mm   { background: #3a1a1a; color: #e74c3c;  border: 1px solid #e74c3c44; }
+
+  /* Resolve preview box */
+  .resolve-box {
     background: #0f3460; border: 1px solid #1a5276; border-radius: 8px;
-    padding: 10px 14px; margin-top: 10px; font-size: 0.88rem; display: none;
+    padding: 10px 14px; margin-top: 10px; display: none;
   }
-  .lookup-result.visible { display: block; }
-  .lookup-result .inv-num { font-size: 1.1rem; font-weight: 700; color: #f0a500; }
-  .lookup-result .aliases { color: #aaa; font-size: 0.8rem; margin-top: 2px; }
-  .lookup-result .stock { margin-top: 6px; color: #2ecc71; font-size: 1rem; }
+  .resolve-box.visible { display: block; }
+  .resolve-box .tool-name { font-size: 1rem; font-weight: 700; color: #f0a500; margin-bottom: 6px; }
 
   /* Table */
   table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
-  thead th {
-    background: #0f3460; color: #a0c4ff; padding: 8px 12px;
-    text-align: left; font-weight: 600; border-bottom: 2px solid #1a5276;
-  }
+  thead th { background: #0f3460; color: #a0c4ff; padding: 8px 12px; text-align: left; font-weight: 600; border-bottom: 2px solid #1a5276; }
   tbody tr { border-bottom: 1px solid #0f3460; transition: background 0.1s; }
   tbody tr:hover { background: #1a2a4a; }
-  tbody td { padding: 8px 12px; }
-  tbody td.inv { color: #f0a500; font-weight: 700; font-size: 1rem; }
-  tbody td.sizes { color: #888; font-size: 0.8rem; }
-  .badge {
-    display: inline-block; padding: 2px 8px; border-radius: 12px;
-    font-size: 0.78rem; font-weight: 600; margin-right: 4px;
+  tbody td { padding: 8px 12px; vertical-align: middle; }
+  td.inv-cell { color: #f0a500; font-weight: 700; font-size: 1rem; }
+
+  .empty { color: #555; font-style: italic; text-align: center; padding: 20px 0; }
+
+  /* Master list modal */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 100; align-items: flex-start; justify-content: center; padding: 32px 16px; overflow-y: auto; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: #16213e; border: 1px solid #0f3460; border-radius: 12px; padding: 24px; width: 560px; max-width: 98vw; }
+  .modal h3 { color: #f0a500; margin-bottom: 4px; }
+  .modal .modal-sub { color: #666; font-size: 0.8rem; margin-bottom: 16px; }
+  .modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px; }
+
+  .master-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; flex-wrap: wrap; }
+  .master-row input {
+    background: #0f3460; border: 1px solid #1a5276; color: #e0e0e0;
+    border-radius: 6px; padding: 6px 10px; font-size: 0.85rem; outline: none;
   }
-  .badge-inv { background: #1a5276; color: #a0c4ff; }
-  .badge-inch { background: #1a3a1a; color: #2ecc71; }
-  .badge-mm { background: #3a1a1a; color: #e74c3c; }
+  .master-row input:focus { border-color: #f0a500; }
+  .master-row input.f-inv  { width: 80px; }
+  .master-row input.f-inch { width: 100px; }
+  .master-row input.f-mm   { width: 100px; }
+  .master-row .row-del { background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 1.1rem; padding: 0 4px; opacity: 0.7; }
+  .master-row .row-del:hover { opacity: 1; }
+  .master-rows-wrap { max-height: 340px; overflow-y: auto; padding-right: 4px; margin-bottom: 10px; }
 
-  .empty { color: #555; font-style: italic; text-align: center; padding: 16px 0; }
-
-  .section-divider { border: none; border-top: 1px solid #0f3460; margin: 6px 0 14px; }
-
-  .tabs { display: flex; gap: 2px; margin-bottom: 16px; }
-  .tab {
-    padding: 7px 18px; border-radius: 6px 6px 0 0; cursor: pointer;
-    font-size: 0.85rem; font-weight: 600; background: #0f3460; color: #888;
-    border: 1px solid #0f3460; border-bottom: none;
-  }
-  .tab.active { background: #16213e; color: #f0a500; border-color: #1a5276; }
-  .tab-content { display: none; }
-  .tab-content.active { display: block; }
+  .col-heads { display: flex; gap: 8px; margin-bottom: 4px; }
+  .col-heads span { font-size: 0.72rem; color: #666; }
+  .col-heads .ch-inv  { width: 80px; }
+  .col-heads .ch-inch { width: 100px; }
+  .col-heads .ch-mm   { width: 100px; }
 
   @media (max-width: 600px) {
     .input-group input { width: 130px; }
@@ -104,240 +110,381 @@
 <body>
 
 <h1>🔧 Tool Inventory Tracker</h1>
-<p class="subtitle">Track tools by Inventory #, Inch size, or MM size — all interchangeable in increments of 50</p>
+<p class="subtitle">Enter any identifier — Inv #, Inch, or MM — and it resolves to the full tool</p>
 
+<!-- ADD STOCK -->
 <div class="card">
-  <h2>🔍 Look Up a Tool</h2>
+  <h2>➕ Add Stock</h2>
   <div class="input-row">
     <div class="input-group">
-      <label>Enter Inv #, Inch (e.g. .087"), or MM (e.g. 2.2mm)</label>
-      <input type="text" id="lookupInput" placeholder='e.g. 87 or .087" or 2.2mm' oninput="doLookup()">
-    </div>
-  </div>
-  <div class="lookup-result" id="lookupResult"></div>
-</div>
-
-<div class="card">
-  <h2>➕ Add / Update Tool Stock</h2>
-  <div class="input-row">
-    <div class="input-group">
-      <label>Inventory #</label>
-      <input type="text" id="addInv" placeholder="e.g. 87" oninput="syncAdd('inv')">
+      <label>Inv #</label>
+      <input type="text" id="stockInv" placeholder="e.g. 87" oninput="previewResolve('inv')" onkeydown="if(event.key==='Enter')addStock()">
     </div>
     <div class="input-group">
-      <label>Inch Size</label>
-      <input type="text" id="addInch" placeholder='e.g. .087"' oninput="syncAdd('inch')">
+      <label>Inch</label>
+      <input type="text" id="stockInch" placeholder='e.g. .010"' oninput="previewResolve('inch')" onkeydown="if(event.key==='Enter')addStock()">
     </div>
     <div class="input-group">
-      <label>MM Size</label>
-      <input type="text" id="addMm" placeholder="e.g. 2.2mm" oninput="syncAdd('mm')">
+      <label>MM</label>
+      <input type="text" id="stockMm" placeholder="e.g. .25mm" oninput="previewResolve('mm')" onkeydown="if(event.key==='Enter')addStock()">
     </div>
     <div class="qty-group">
       <label>Boxes to Add (×50 ea)</label>
       <div class="qty-row">
-        <button onclick="changeAddQty(-1)">−</button>
-        <input type="number" id="addQty" value="1" min="1">
-        <button onclick="changeAddQty(1)">+</button>
+        <button onclick="changeQty('stockQty',-1)">−</button>
+        <input type="number" id="stockQty" value="1" min="1">
+        <button onclick="changeQty('stockQty',1)">+</button>
       </div>
     </div>
-    <button class="btn btn-add" onclick="addStock()" style="margin-bottom:1px">Add Stock</button>
+    <button class="btn btn-add" style="align-self:flex-end;" onclick="addStock()">Add Stock</button>
   </div>
-  <div class="msg" id="addMsg"></div>
+  <div class="resolve-box" id="resolveBox"></div>
+  <div class="msg" id="stockMsg"></div>
 </div>
 
+<!-- INVENTORY -->
 <div class="card">
-  <h2>📋 Full Inventory</h2>
-  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-    <span style="font-size:0.82rem; color:#888;" id="invCount"></span>
-    <button class="btn btn-clear" onclick="clearAll()">Clear All Data</button>
+  <h2>📋 Current Inventory</h2>
+  <div style="display:flex;justify-content:flex-end;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+      <button class="btn btn-clear btn-sm" onclick="clearStock()">Clear Stock Counts</button>
+      <span id="confirmClear" style="display:none;align-items:center;gap:6px;">
+        <span style="font-size:0.78rem;color:#e74c3c;">Reset all counts to 0?</span>
+        <button class="btn btn-remove btn-sm" onclick="confirmClearStock()">Yes</button>
+        <button class="btn btn-clear btn-sm" onclick="cancelClear()">No</button>
+      </span>
+    </div>
   </div>
   <div id="inventoryTable"></div>
 </div>
 
+<!-- MASTER LIST MODAL -->
+<div class="modal-overlay" id="masterModal">
+  <div class="modal">
+    <h3>⚙ Master Tool List</h3>
+    <p class="modal-sub">Define every tool here. Leave Inv #, Inch, or MM blank if a tool doesn't have one. Any field entered on the main screen will resolve to this record.</p>
+    <div class="col-heads">
+      <span class="ch-inv">Inv #</span>
+      <span class="ch-inch">Inch</span>
+      <span class="ch-mm">MM</span>
+    </div>
+    <div class="master-rows-wrap" id="masterRows"></div>
+    <button class="btn btn-master btn-sm" onclick="addMasterRow()">+ Add Tool</button>
+    <div class="modal-footer">
+      <button class="btn btn-clear" onclick="closeMaster()">Cancel</button>
+      <button class="btn btn-add" onclick="saveMaster()">Save Master List</button>
+    </div>
+  </div>
+</div>
+
 <script>
-// ─── DATA ───────────────────────────────────────────────────────────────────
-// tools: { [invNum]: { inch: string|null, mm: string|null, qty: number } }
-let tools = JSON.parse(localStorage.getItem('toolInventory') || '{}');
+// ─── MASTER LIST ──────────────────────────────────────────────────────────────
+// Master list is always defined here in code — edit this to add/remove tools.
+// Stock counts are saved in localStorage separately.
 
-function save() {
-  localStorage.setItem('toolInventory', JSON.stringify(tools));
-}
+const masterList = [
+  { inv: '87', inches: ['.010', '.0098'],  mms: ['.25']  },
+  { inv: '97', inches: ['.0059'], mms: ['.15']  },
+  { inv: '92', inches: ['.0079'], mms: ['.20']  },
+  { inv: '83', inches: ['.0115', '.0118', '.0120'], mms: ['.30'] },
+  {inv: '80', inches: ['.0135', '.0138'] },
+  {inv: '79', inches: ['.0145']},
+  {inv: '78', inches: ['.0156', '.0158', '.0160'], mms: ['.40']},
+  {inv: '77', inches: ['.0177', '.0180'], mms: ['.45']},
+  {inv: '76', inches: ['.0197', '.02'], mms: ['.50']},
+  {inv: '75', inches: ['.0210']},
+  {inv: '74', inches: ['.0225']},
+  {inv: '73', inches: ['.0236', '.0240'], mms: ['.60']},
+  {inv: '72', inches: ['.0250']},
+  {inv: '71', inches: ['.0256', '.0260'], mms: ['.65']},
+  {inv: '70', inches: ['.0276', '.0280'], mms: ['.70']},
+  {inv: '69', inches: ['.0292', '0295'], mms: ['.75']},
+  {inv: '68', inches: ['.0310', '0312']},
+  {inv: '67', inches: ['.0320']},
+  {inv: '66', inches: ['.0330']},
+  {inv: '65', inches: ['.0350', '0354'], mms: ['.90']},
+  {inv: '64', inches: ['.0360']},
+  {inv: '63', inches: ['.0370', '.0374'], mms: ['.95']},
+  {inv: '62', inches: ['.0380']},
+  {inv: '61', inches: ['.0390', '.0394'], mms: ['1.00']},
+  {inv: '60', inches: ['.0400']},
+  {inv: '59', inches: ['.0410', '.0413'], mms: ['1.05']},
+  {inv: '58', inches: ['.0420']},
+  {inv: '57', inches: ['.0430', '.0433'], mms: ['1.10']},
+  {inches: ['.0453'], mms: ['1.15']},
+  {inv: '56', inches: ['.0465']},
+  {inches: ['.0469', '.0472'], mms: ['1.20']},
+  {inches: ['.0492'], mms: ['1.25']},
+  {inches: ['.0512'], mms: ['1.30']},
+  {inv: '55', inches: ['.0520']},
+  {inches: ['.0531'], mms: ['1.35']},
+  {inv: '54', inches: ['.0550', '.0551'], mms: ['1.40']},
+  {inches: ['.0571'], mms: ['1.45']},
+  {inv: '53', inches: ['.0595', '.0591'], mms: ['1.50']},
+  {inches: ['.0610'], mms: ['1.55']},
+  {inv: '1/16', inches: ['.0625', '.0630'], mms: ['1.60']},
+  {inv: '52', inches: ['.0635']},
+  {inches: ['.0650'], mms: ['1.65']},
+  {inv: '51', inches: ['.0669', '.0670'], mms: ['1.70']},
+  {inches: ['.0689'], mms: ['1.75']},
+  {inv: '50', inches: ['.0700']},
+  {inches: ['.0709'], mms: ['1.80']},
+  {inv: '49', inches: ['.0728', '.0730'], mms: ['1.80']},
+  {inches: ['.0748'], mms: ['1.90']},
+  {inv: '48', inches: ['.0760']},
+  {inches: ['.0768'], mms: ['1.95']},
+  {inv: '5/64', inches: ['.0781']},
+  {inv: '47', inches: ['.0785', '.0787'], mms: ['2.00']},
+  {inv: '46', inches: ['.0807', '.0810'], mms: ['2.05']},
+  {inv: '45', inches: ['.0820']},
+  {inches: ['.0827'], mms: ['2.10']},
+  {inches: ['.0846'], mms: ['2.15']},
+  {inv: '44', inches: ['.0860']},
+  {inches: ['.0866'], mms: ['2.20']},
+  {inv: '43', inches: ['.0886', '.0890'], mms: ['2.25']},
+  {inches: ['.0906'], mms: ['2.30']},
+  {inches: ['.0925'], mms: ['2.35']},
+  {inv: '42', inches: ['.0935', '.0938']},
+  {inches: ['.0945'], mms: ['2.40']},
+  {inv: '41', inches: ['.0960']},
+  {inches: ['.0965'], mms: ['2.45']},
+  {inv: '40', inches: ['.0980', '.0984'], mms: ['2.50']},
+  {inv: '39', inches: ['.0995']},
+  {inches: ['.1004'], mms: ['2.55']},
+  {inv: '38', inches: ['.1015']},
+  {inches: ['.1024'], mms: ['2.60']},
+  {inv: '37', inches: ['.1040', '.1043'], mms: ['2.65']},
+  {inv: '36', inches: ['.1063', '.1065'], mms: ['2.70']},
+  {inches: ['.1083'], mms: ['2.75']},
+  {inv: '35', inches: ['.1102', '.1100'], mms: ['2.80']},
+  {inv: '34', inches: ['.1110']},
+  {inches: ['.1122'], mms: ['2.85']},
+  {inv: '33', inches: ['.1130']},
+  {inches: ['.1142'], mms: ['2.90']},
+  {inv: '32', inches: ['.1160', '.1161'], mms: ['2.95']},
+  {inches: ['.1181'], mms: ['3.00']},
+  {inv: '31', inches: ['.1200', '.1201'], mms: ['3.05']},
+  {inches: ['.1220'], mms: ['3.10']},
+  {inches: ['.1240'], mms: ['3.15']},
+  {inv: '1/8', inches: ['.1250']},
+  {inches: ['.1260'], mms: ['3.20']},
+  {inv: '30', inches: ['.1285', '.1280'], mms: ['3.25']},
+  {inches: ['.1299'], mms: ['3.30']},
+  {inches: ['.1319'], mms: ['3.35']},
+  {inches: ['.1339'], mms: ['3.40']},
+  {inv: '29', inches: ['.1358', '.1360'], mms: ['3.45']},
+  {inches: ['.1378'], mms: ['3.50']},
+  {inches: ['.1398'], mms: ['3.55']},
+  {inv: '28', inches: ['.1405', '.1406']},
+  {inches: ['.1417'], mms: ['3.60']},
+  {inv: '27', inches: ['.1437', '.1440'], mms: ['3.65']},
+  {inches: ['.1457'], mms: ['3.70']},
+  {inches: ['.1476'], mms: ['3.75']},
+  {inv: '26', inches: ['.1470']},
+  {inv: '25', inches: ['.1495', '.1496'], mms: ['3.80']},
+  {inv: '24', inches: ['.1516', '.1520'], mms: ['3.85']},
+  {inv: '23', inches: ['.1535', '.1540'], mms: ['3.90']},
+  {inches: ['.1555'], mms: ['3.95']},
+  {inv: '22', inches: ['.1562']},
+  {inv: '5/32', inches: ['.1570']},
+  {inches: ['.1575'], mms: ['4.00']},
+  {inv: '21', inches: ['.1590', '.1594'], mms: ['4.05']},
+  {inv: '20', inches: ['.1610', '.1614'], mms: ['4.10']},
+  {inches: ['.1634'], mms: ['4.15']},
+  {inches: ['.1654'], mms: ['4.20']},
+  {inv: '19', inches: ['.1660']},
+  {inches: ['.1673'], mms: ['4.25']},
+  {inv: '18', inches: ['.1693', '.1695'], mms: ['4.30']},
+  {inches: ['.1713'], mms: ['4.35']},
+  {inv: '17', inches: ['.1730', '.1732'], mms: ['4.40']},
+  {inches: ['.1752'], mms: ['4.45']},
+  {inv: '16', inches: ['.1770', '.1772'], mms: ['4.50']},
+  {inches: ['.1791'], mms: ['4.55']},
+  {inv: '15', inches: ['.1800']},
+  {inches: ['.1811'], mms: ['4.60']},
+  {inv: '14', inches: ['.1820']},
+  {inches: ['.1831'], mms: ['4.65']},
+  {inv: '13', inches: ['.1850'], mms: ['4.70']},
+  {inv: '3/16', inches: ['.1870', '.1875'], mms: ['4.75']},
+  {inv: '12', inches: ['.1890'], mms: ['4.80']},
+  {inv: '11', inches: ['.1909', '.1910'], mms: ['4.85']},
+  {inches: ['.1929'], mms: ['4.90']},
+  {inv: '10', inches: ['.1935']},
+  {inches: ['.1949'], mms: ['4.95']},
+  {inv: '9', inches: ['.1960']},
+  {inches: ['.1968'], mms: ['5.00']},
+  {inv: '8', inches: ['.1988', '.1990'], mms: ['5.05']},
+  {inv: '7', inches: ['.2008', '.2010'], mms: ['5.10']},
+  {inv: '13/64', inches: ['.2028', '.2031'], mms: ['5.15']},
+  {inv: '6', inches: ['.2040']},
+  {inches: ['.2047'], mms: ['5.20']},
+  {inv: '5', inches: ['.2055']},
+  {inches: ['.2067'], mms: ['5.25']},
+  {inv: '4', inches: ['.2087', '.2090'], mms: ['5.30']},
+  {inches: ['.2106'], mms: ['5.35']},
+  {inv: '3', inches: ['.2126', '.2130'], mms: ['5.40']},
 
-// ─── CONVERSION ─────────────────────────────────────────────────────────────
-// Inventory number is the canonical ID (integer string, e.g. "87")
-// Inch stored as decimal string, mm stored as decimal string
+  
+];
 
-function invToInch(inv) {
-  // inv 87 → .087"
-  const n = parseInt(inv);
-  if (isNaN(n)) return null;
-  return '.' + String(n).padStart(3, '0') + '"';
-}
+let stock = JSON.parse(localStorage.getItem('toolStock') || '{}');
 
-function invToMm(inv) {
-  const n = parseInt(inv);
-  if (isNaN(n)) return null;
-  // standard: inv * 0.0254 mm rounded to 2 decimal places
-  return (n * 0.0254).toFixed(2) + 'mm';
-}
-
-function parseInput(raw) {
-  if (!raw) return null;
-  const s = raw.trim().replace(/\s/g, '').toLowerCase();
-
-  // Try mm: number followed by mm
-  const mmMatch = s.match(/^(\d+\.?\d*)mm$/);
-  if (mmMatch) {
-    const mm = parseFloat(mmMatch[1]);
-    const inv = Math.round(mm / 0.0254);
-    return String(inv);
-  }
-
-  // Try inch: optional leading dot, digits, optional "
-  const inchMatch = s.match(/^\.?(\d+\.?\d*)"?$|^(\d+\.?\d*)"$/);
-  if (inchMatch) {
-    const val = parseFloat(inchMatch[1] || inchMatch[2]);
-    // if it looks like a decimal inch (e.g. .087 = 0.087)
-    // inv = val * 1000 if val < 1, else check if it's already an integer inv#
-    if (val < 1) {
-      return String(Math.round(val * 1000));
-    } else {
-      // Could be inv # entered with " e.g. 87" — treat as inv
-      return String(Math.round(val));
-    }
-  }
-
-  // Try plain number → inventory number
-  const numMatch = s.match(/^\d+$/);
-  if (numMatch) return s;
-
-  return null;
-}
-
-function getToolDisplay(invStr) {
-  if (!invStr || !tools[invStr]) return null;
-  const t = tools[invStr];
-  return {
-    inv: invStr,
-    inch: t.inch || invToInch(invStr),
-    mm: t.mm || invToMm(invStr),
-    qty: t.qty
-  };
+function savePersist() {
+  localStorage.setItem('toolStock', JSON.stringify(stock));
 }
 
 // ─── LOOKUP ──────────────────────────────────────────────────────────────────
-function doLookup() {
-  const raw = document.getElementById('lookupInput').value;
-  const result = document.getElementById('lookupResult');
-  if (!raw.trim()) { result.className = 'lookup-result'; return; }
+function normalize(s) {
+  return (s || '').trim().toLowerCase()
+    .replace(/\s/g, '')   // no spaces
+    .replace(/"+/g, '')   // strip inch symbols
+    .replace(/mm$/,  ''); // strip trailing mm
+}
 
-  const inv = parseInput(raw);
-  if (!inv) {
-    result.className = 'lookup-result visible';
-    result.innerHTML = `<span style="color:#e74c3c">Could not parse input. Try: 87, .087", or 2.2mm</span>`;
+// Returns index into masterList, or -1
+function findTool(raw) {
+  const n = normalize(raw);
+  if (!n) return -1;
+  for (let i = 0; i < masterList.length; i++) {
+    const t = masterList[i];
+    if (t.inv    && normalize(t.inv) === n) return i;
+    if (t.inches && t.inches.some(v => normalize(v) === n)) return i;
+    if (t.mms    && t.mms.some(v    => normalize(v) === n)) return i;
+  }
+  return -1;
+}
+
+function toolLabel(t) {
+  const parts = [];
+  if (t.inv) parts.push(`Inv #${t.inv}`);
+  if (t.inches && t.inches.length) parts.push(t.inches.join(' / '));
+  if (t.mms    && t.mms.length)    parts.push(t.mms.join(' / '));
+  return parts.join(' · ') || '(unnamed tool)';
+}
+
+// ─── RESOLVE PREVIEW ─────────────────────────────────────────────────────────
+function getActiveInput() {
+  // Return the value from whichever field has content, prioritizing inv > inch > mm
+  return document.getElementById('stockInv').value.trim()
+      || document.getElementById('stockInch').value.trim()
+      || document.getElementById('stockMm').value.trim();
+}
+
+function clearStockInputs() {
+  document.getElementById('stockInv').value  = '';
+  document.getElementById('stockInch').value = '';
+  document.getElementById('stockMm').value   = '';
+  document.getElementById('stockQty').value  = 1;
+  document.getElementById('resolveBox').className = 'resolve-box';
+}
+
+function previewResolve(source) {
+  const raw = getActiveInput();
+  const box = document.getElementById('resolveBox');
+  document.getElementById('stockMsg').textContent = '';
+  if (!raw) { box.className = 'resolve-box'; return; }
+
+  const idx = findTool(raw);
+  if (idx === -1) {
+    box.className = 'resolve-box visible';
+    box.innerHTML = `<span style="color:#e74c3c;">No match in master list for "${raw}"</span>`;
     return;
   }
 
-  const d = getToolDisplay(inv);
-  if (!d) {
-    result.className = 'lookup-result visible';
-    result.innerHTML = `<span style="color:#e74c3c">Inv #${inv} not in inventory yet.</span>`;
-    return;
-  }
-
-  result.className = 'lookup-result visible';
-  result.innerHTML = `
-    <span class="inv-num">Inventory #${d.inv}</span>
-    <div class="aliases">
-      <span class="badge badge-inch">${d.inch}</span>
-      <span class="badge badge-mm">${d.mm}</span>
+  const t = masterList[idx];
+  const qty = stock[idx] || 0;
+  box.className = 'resolve-box visible';
+  box.innerHTML = `
+    <div class="tool-name">${toolLabel(t)}</div>
+    <div style="margin-bottom:4px;">
+      ${t.inv    ? `<span class="tag tag-inv">Inv #${t.inv}</span>` : ''}
+      ${(t.inches||[]).map(v=>`<span class="tag tag-inch">${v}</span>`).join('')}
+      ${(t.mms||[]).map(v=>`<span class="tag tag-mm">${v}</span>`).join('')}
     </div>
-    <div class="stock">📦 ${d.qty} boxes &nbsp;|&nbsp; ${d.qty * 50} units</div>
-  `;
+    <div style="color:#2ecc71;font-size:0.88rem;">Currently: ${qty} box${qty!==1?'es':''} (${qty*50} units)</div>`;
 }
 
-// ─── SYNC INPUTS ─────────────────────────────────────────────────────────────
-function syncAdd(source) {
-  const invEl = document.getElementById('addInv');
-  const inchEl = document.getElementById('addInch');
-  const mmEl = document.getElementById('addMm');
-
-  let raw;
-  if (source === 'inv') raw = invEl.value;
-  else if (source === 'inch') raw = inchEl.value;
-  else raw = mmEl.value;
-
-  const inv = parseInput(raw);
-  if (!inv) return;
-
-  if (source !== 'inv') invEl.value = inv;
-  if (source !== 'inch') inchEl.value = invToInch(inv);
-  if (source !== 'mm') mmEl.value = invToMm(inv);
-}
-
-function changeAddQty(d) {
-  const el = document.getElementById('addQty');
-  el.value = Math.max(1, parseInt(el.value || 1) + d);
-}
 // ─── ADD STOCK ───────────────────────────────────────────────────────────────
 function addStock() {
-  const invRaw = document.getElementById('addInv').value;
-  const inchRaw = document.getElementById('addInch').value;
-  const mmRaw = document.getElementById('addMm').value;
-  const qty = parseInt(document.getElementById('addQty').value) || 1;
-  const msg = document.getElementById('addMsg');
+  const raw = getActiveInput();
+  const qty = parseInt(document.getElementById('stockQty').value) || 1;
+  const msg = document.getElementById('stockMsg');
 
-  // Resolve inv from whichever field is filled
-  let inv = parseInput(invRaw) || parseInput(inchRaw) || parseInput(mmRaw);
-  if (!inv) {
-    msg.className = 'msg error'; msg.textContent = 'Enter an Inventory #, Inch size, or MM size.'; return;
+  if (!raw) { msg.className='msg error'; msg.textContent='Enter an Inv #, Inch size, or MM size.'; return; }
+
+  const idx = findTool(raw);
+  if (idx === -1) {
+    msg.className = 'msg error';
+    msg.textContent = `"${raw}" not found in master list.`;
+    return;
   }
 
-  if (!tools[inv]) tools[inv] = { inch: null, mm: null, qty: 0 };
+  stock[idx] = (stock[idx] || 0) + qty;
+  savePersist();
+  renderInventory();
 
-  // Store custom inch/mm if provided (overrides auto-calculated)
-  if (inchRaw.trim()) tools[inv].inch = inchRaw.trim();
-  if (mmRaw.trim()) tools[inv].mm = mmRaw.trim();
-  tools[inv].qty += qty;
-
-  save(); renderInventory();
+  const t = masterList[idx];
   msg.className = 'msg success';
-  msg.textContent = `✓ Added ${qty} box${qty>1?'es':''} (${qty*50} units) to Inv #${inv}. Total: ${tools[inv].qty} boxes.`;
+  msg.textContent = `✓ Added ${qty} box${qty>1?'es':''} to ${toolLabel(t)}. Total: ${stock[idx]} boxes.`;
 
-  document.getElementById('addInv').value = '';
-  document.getElementById('addInch').value = '';
-  document.getElementById('addMm').value = '';
-  document.getElementById('addQty').value = 1;
+  clearStockInputs();
+}
+
+function changeQty(id, delta) {
+  const el = document.getElementById(id);
+  el.value = Math.max(1, (parseInt(el.value) || 1) + delta);
 }
 
 // ─── INVENTORY TABLE ─────────────────────────────────────────────────────────
 function renderInventory() {
   const el = document.getElementById('inventoryTable');
-  const count = document.getElementById('invCount');
-  const keys = Object.keys(tools).sort((a,b) => parseInt(a)-parseInt(b));
-  count.textContent = `${keys.length} tool type${keys.length!==1?'s':''} tracked`;
 
-  if (keys.length === 0) {
-    el.innerHTML = '<div class="empty">No tools in inventory yet.</div>';
+  // Only show tools that have stock > 0
+  const entries = masterList.map((t, i) => ({ t, i, qty: stock[i] || 0 }))
+                             .filter(e => e.qty > 0);
+
+  if (entries.length === 0) {
+    el.innerHTML = '<div class="empty">No stock added yet. Use "Add Stock" above.</div>';
     return;
   }
+
+  // Sort: by inv # numerically if present, else alphabetically by first size
+  entries.sort((a, b) => {
+    const ai = a.t.inv ? parseFloat(a.t.inv) : Infinity;
+    const bi = b.t.inv ? parseFloat(b.t.inv) : Infinity;
+    if (isFinite(ai) && isFinite(bi)) return ai - bi;
+    return toolLabel(a.t).localeCompare(toolLabel(b.t));
+  });
 
   let html = `<table><thead><tr>
     <th>Inv #</th><th>Inch</th><th>MM</th><th>Boxes</th><th>Units</th><th></th>
   </tr></thead><tbody>`;
 
-  keys.forEach(inv => {
-    const t = tools[inv];
-    const inch = t.inch || invToInch(inv);
-    const mm = t.mm || invToMm(inv);
+  entries.forEach(({ t, i, qty }) => {
+    const safeI = String(i);
+    const invCell  = t.inv  ? t.inv  : '<span style="color:#555;">—</span>';
+    const inchCell = (t.inches||[]).length ? t.inches.map(v=>`<span class="tag tag-inch">${v}</span>`).join('') : '<span style="color:#555;">—</span>';
+    const mmCell   = (t.mms||[]).length   ? t.mms.map(v=>`<span class="tag tag-mm">${v}</span>`).join('')     : '<span style="color:#555;">—</span>';
+
     html += `<tr>
-      <td class="inv">${inv}</td>
-      <td><span class="badge badge-inch">${inch}</span></td>
-      <td><span class="badge badge-mm">${mm}</span></td>
-      <td>${t.qty}</td>
-      <td>${t.qty * 50}</td>
+      <td class="inv-cell">${invCell}</td>
+      <td>${inchCell}</td>
+      <td>${mmCell}</td>
       <td>
-        <button class="btn btn-remove" style="padding:3px 10px;font-size:0.78rem" onclick="removeTool('${inv}')">Remove</button>
+        <div class="qty-row" style="gap:4px;">
+          <button style="width:26px;height:28px;background:#0f3460;border:1px solid #1a5276;color:#e0e0e0;border-radius:4px;cursor:pointer;font-size:1rem;" onclick="adjustStock(${safeI},-1)">−</button>
+          <span style="min-width:28px;text-align:center;">${qty}</span>
+          <button style="width:26px;height:28px;background:#0f3460;border:1px solid #1a5276;color:#e0e0e0;border-radius:4px;cursor:pointer;font-size:1rem;" onclick="adjustStock(${safeI},1)">+</button>
+        </div>
+      </td>
+      <td>${qty * 50}</td>
+      <td style="white-space:nowrap;">
+        <button id="btn-remove-${safeI}" class="btn btn-remove btn-sm" onclick="removeStock('${safeI}')">Remove</button>
+        <span id="confirm-remove-${safeI}" style="display:none;align-items:center;gap:6px;">
+          <span style="font-size:0.78rem;color:#e74c3c;">Sure?</span>
+          <button class="btn btn-remove btn-sm" onclick="confirmRemoveStock('${safeI}')">Yes</button>
+          <button class="btn btn-clear btn-sm" onclick="cancelRemove('${safeI}')">No</button>
+        </span>
       </td>
     </tr>`;
   });
@@ -346,16 +493,142 @@ function renderInventory() {
   el.innerHTML = html;
 }
 
-function removeTool(inv) {
-  if (!confirm(`Remove Inv #${inv} from inventory?`)) return;
-  delete tools[inv];
-  save(); renderInventory();
+function adjustStock(idx, delta) {
+  const cur = stock[idx] || 0;
+  const next = cur + delta;
+  if (next <= 0) {
+    stock[idx] = 0;
+    delete stock[idx];
+  } else {
+    stock[idx] = next;
+  }
+  savePersist();
+  renderInventory();
 }
 
-function clearAll() {
-  if (!confirm('Clear ALL inventory data?')) return;
-  tools = {};
-  save(); renderInventory();
+function removeStock(idx) {
+  document.getElementById('confirm-remove-' + idx).style.display = 'inline-flex';
+  document.getElementById('btn-remove-' + idx).style.display = 'none';
+}
+function confirmRemoveStock(idx) {
+  delete stock[idx];
+  savePersist();
+  renderInventory();
+}
+function cancelRemove(idx) {
+  const el = document.getElementById('confirm-remove-' + idx);
+  if (el) el.style.display = 'none';
+  const btn = document.getElementById('btn-remove-' + idx);
+  if (btn) btn.style.display = 'inline-block';
+}
+
+// ─── CLEAR STOCK ─────────────────────────────────────────────────────────────
+function clearStock() {
+  document.getElementById('confirmClear').style.display = 'flex';
+}
+function confirmClearStock() {
+  stock = {};
+  savePersist();
+  renderInventory();
+  document.getElementById('confirmClear').style.display = 'none';
+}
+function cancelClear() {
+  document.getElementById('confirmClear').style.display = 'none';
+}
+
+// ─── MASTER LIST MODAL ───────────────────────────────────────────────────────
+let editingMaster = [];
+
+function openMaster() {
+  // Deep copy
+  editingMaster = masterList.map(t => ({
+    inv:    t.inv    || '',
+    inches: [...(t.inches || [])],
+    mms:    [...(t.mms    || [])]
+  }));
+  renderMasterRows();
+  document.getElementById('masterModal').className = 'modal-overlay open';
+}
+
+function closeMaster() {
+  document.getElementById('masterModal').className = 'modal-overlay';
+}
+
+function renderMasterRows() {
+  const wrap = document.getElementById('masterRows');
+  if (editingMaster.length === 0) {
+    wrap.innerHTML = '<div class="empty" style="padding:12px 0;">No tools yet. Click "+ Add Tool".</div>';
+    return;
+  }
+  wrap.innerHTML = editingMaster.map((t, i) => `
+    <div class="master-row" id="mrow-${i}">
+      <input class="f-inv"  type="text" placeholder="Inv #"  value="${escHtml(t.inv)}"
+             oninput="editingMaster[${i}].inv=this.value">
+      <input class="f-inch" type="text" placeholder='Inch (e.g. .010")'
+             value="${escHtml((t.inches||[]).join(', '))}"
+             title="Separate multiple with commas"
+             oninput="editingMaster[${i}].inches=splitVals(this.value)">
+      <input class="f-mm"   type="text" placeholder="MM (e.g. .25mm)"
+             value="${escHtml((t.mms||[]).join(', '))}"
+             title="Separate multiple with commas"
+             oninput="editingMaster[${i}].mms=splitVals(this.value)">
+      <button class="row-del" title="Remove this tool" onclick="deleteMasterRow(${i})">✕</button>
+    </div>`).join('');
+}
+
+function splitVals(s) {
+  return s.split(',').map(v => v.trim()).filter(Boolean);
+}
+
+function escHtml(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+}
+
+function addMasterRow() {
+  editingMaster.push({ inv: '', inches: [], mms: [] });
+  renderMasterRows();
+  // Scroll to bottom of list
+  const wrap = document.getElementById('masterRows');
+  wrap.scrollTop = wrap.scrollHeight;
+}
+
+function deleteMasterRow(i) {
+  editingMaster.splice(i, 1);
+  renderMasterRows();
+}
+
+function saveMaster() {
+  // Validate: each row must have at least one non-blank field
+  const cleaned = editingMaster.map(t => ({
+    inv:    t.inv.trim(),
+    inches: t.inches.map(v => v.trim()).filter(Boolean),
+    mms:    t.mms.map(v => v.trim()).filter(Boolean)
+  })).filter(t => t.inv || t.inches.length || t.mms.length);
+
+  // Remap stock to new indices (match by inv/inch/mm overlap)
+  const newStock = {};
+  cleaned.forEach((newTool, newIdx) => {
+    // Find old index that best matches
+    const oldIdx = masterList.findIndex(old => {
+      if (old.inv && newTool.inv && normalize(old.inv) === normalize(newTool.inv)) return true;
+      if (old.inches && newTool.inches) {
+        if (old.inches.some(v => newTool.inches.some(nv => normalize(v) === normalize(nv)))) return true;
+      }
+      if (old.mms && newTool.mms) {
+        if (old.mms.some(v => newTool.mms.some(nv => normalize(v) === normalize(nv)))) return true;
+      }
+      return false;
+    });
+    if (oldIdx !== -1 && stock[oldIdx]) {
+      newStock[newIdx] = stock[oldIdx];
+    }
+  });
+
+  masterList = cleaned;
+  stock = newStock;
+  savePersist();
+  renderInventory();
+  closeMaster();
 }
 
 // ─── INIT ────────────────────────────────────────────────────────────────────
